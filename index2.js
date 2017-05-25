@@ -9,6 +9,9 @@ var fireNum = 0;
 var spawnRate = 50;
 var spawnTick = 0;
 var score = 0;
+var upTick = 0;
+var level = 1;
+var levelUp = 10;
 
 var rightPressed = false;
 var leftPressed = false;
@@ -28,6 +31,11 @@ function drawScore() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#0095DD"
     ctx.fillText("Score: "+score, 8,20);
+}
+function drawLevel() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD"
+    ctx.fillText("Level: "+level, 8,40);
 }
 function keyDownHandler(e) {
     if(e.keyCode == 39) {
@@ -74,7 +82,8 @@ function createEnemy() {
     
     enemy.rad = parseInt(Math.random()*50)+10;
     enemy.y = 0-(enemy.rad*2);
-    enemy.health = 4;
+    enemy.health = parseInt(Math.sqrt(enemy.rad));
+    enemy.speed = parseInt(Math.random()*10)+1
     enemies.push(enemy)
 }
 
@@ -103,9 +112,14 @@ function collisionDetection() {
             var distance = Math.sqrt(dx * dx + dy * dy);
             
             if (distance < bulletRadius + en.rad) {
+                console.log(en.health)
                 en.health -= 1;
                 if(en.health === 0) {
-                    score++;    
+                    score++;
+                    if(score > (level*levelUp)) {
+                        level += 1;
+                        
+                    }    
                     enemies.splice(enI,1);
                 }
                 bullets.splice(bbI,1);                
@@ -137,7 +151,7 @@ function draw() {
         if(en.y>canvas.height+(en.rad*2)) {
             enemies.splice(index,1)
         } else {
-            en.y += ey;
+            en.y += en.speed+level;
         }
     })
     
@@ -151,6 +165,7 @@ function draw() {
     // } 
     drawPlayer();
     drawScore();
+    drawLevel();
     collisionDetection();
     if(rightPressed && playerX < canvas.width-playerWidth) {
         playerX += 7;
