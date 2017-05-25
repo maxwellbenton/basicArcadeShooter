@@ -117,7 +117,6 @@ function collisionDetection() {
             var dy = bb.y - en.y;
             var distance = Math.sqrt(dx * dx + dy * dy);  
             if (distance < bulletRadius + en.rad) {
-                console.log(en.health)
                 en.health -= 1;
                 if(en.health === 0) {
                     score++;
@@ -133,7 +132,6 @@ function collisionDetection() {
         var dy = canvas.height-playerWidth/2 - en.y;
         var distance = Math.sqrt(dx * dx + dy * dy);
         if (distance < (en.rad + (playerWidth/2))) {
-            console.log("dx:"+dx+", dy:"+dy+", enY:"+en.y+", dist:"+distance+", enR:"+en.rad+", pR:"+(playerWidth/2));
             alert("GAME OVER");
             document.location.reload();
         }
